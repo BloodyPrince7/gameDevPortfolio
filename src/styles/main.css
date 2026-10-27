@@ -1,0 +1,971 @@
+:root {
+  --bg-abyss: #090305;
+  --panel-bg: rgba(9, 4, 6, 0.86);
+  --panel-bg-unlocked: rgba(12, 5, 8, 0.92);
+  --crimson: #ff2242;
+  --crimson-bright: #ff4762;
+  --crimson-deep: #7a0919;
+  --lantern-warm: #fff4d6;
+  --text-primary: #f7f4f2;
+  --text-secondary: #d4c6c8;
+  --text-muted: #988286;
+  --border-sealed: rgba(255, 50, 78, 0.18);
+  --border-unlocked: rgba(255, 62, 90, 0.62);
+  --font-display: 'Barlow Condensed', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-abyss);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #1a0307;
+}
+
+/* Full-viewport fixed 2D Mine Shaft Canvas */
+#mine-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Sticky Top Game HUD Header (matches Style #1 Mockup) */
+.hud-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 62px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 24px;
+  background: linear-gradient(180deg, rgba(8, 3, 5, 0.95) 0%, rgba(15, 4, 7, 0.85) 100%);
+  border-bottom: 1px solid rgba(255, 48, 76, 0.32);
+  backdrop-filter: blur(10px);
+}
+
+.hud-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.hud-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.48rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.hud-slash {
+  color: var(--crimson);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.hud-role {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.12rem;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.hud-telemetry {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.depth-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 4px;
+  background: rgba(255, 34, 66, 0.12);
+  border: 1px solid rgba(255, 34, 66, 0.36);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--lantern-warm);
+}
+
+.hud-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: rgba(14, 5, 8, 0.9);
+  border: 1px solid rgba(255, 244, 214, 0.35);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.hud-btn:hover {
+  border-color: var(--lantern-warm);
+  background: rgba(255, 34, 66, 0.22);
+  transform: translateY(-1px);
+}
+
+.hud-btn--crimson {
+  background: linear-gradient(135deg, #d8122f 0%, #99091e 100%);
+  border-color: #ff5972;
+  box-shadow: 0 0 16px rgba(255, 34, 66, 0.38);
+}
+
+.hud-btn--crimson:hover {
+  background: linear-gradient(135deg, #f31939 0%, #b50b24 100%);
+  box-shadow: 0 0 22px rgba(255, 48, 82, 0.65);
+}
+
+.hud-btn--unlocked {
+  background: rgba(28, 12, 16, 0.9);
+  border-color: rgba(255, 244, 214, 0.5);
+  box-shadow: none;
+}
+
+.hud-btn--audio-ready {
+  border-color: #ff5972;
+  animation: audioGlow 2s ease-in-out infinite;
+}
+
+@keyframes audioGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(255, 34, 66, 0);
+  }
+  50% {
+    box-shadow: 0 0 14px rgba(255, 48, 82, 0.55);
+  }
+}
+
+.btn-label-short {
+  display: none;
+}
+
+/* Right-Edge Vertical Scroll Depth Ruler (Style #1 Mockup) */
+.depth-ruler {
+  position: fixed;
+  right: 14px;
+  top: 84px;
+  bottom: 28px;
+  width: 68px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+.scroll-prompt-tag {
+  font-family: var(--font-display);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.15;
+  text-align: right;
+  color: var(--lantern-warm);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+  margin-bottom: 10px;
+  animation: pulseBob 1.9s ease-in-out infinite;
+}
+
+@keyframes pulseBob {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.92;
+  }
+  50% {
+    transform: translateY(4px);
+    opacity: 1;
+  }
+}
+
+.ruler-track {
+  position: relative;
+  flex: 1;
+  width: 6px;
+  background: rgba(8, 3, 5, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 99px;
+  overflow: visible;
+  pointer-events: auto;
+}
+
+.ruler-fill {
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(180deg, var(--lantern-warm) 0%, var(--crimson) 100%);
+  border-radius: 99px;
+  box-shadow: 0 0 10px rgba(255, 34, 66, 0.75);
+}
+
+.ruler-node {
+  position: absolute;
+  right: 12px;
+  transform: translateY(-50%);
+  background: rgba(8, 3, 5, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: var(--text-secondary);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.16s ease;
+}
+
+.ruler-node:hover,
+.ruler-node.is-active {
+  color: var(--lantern-warm);
+  border-color: var(--crimson-bright);
+  background: rgba(185, 14, 38, 0.88);
+}
+
+/* Main World Container */
+.mine-world {
+  position: relative;
+  z-index: 10;
+  max-width: 1460px;
+  margin: 0 auto;
+  padding: 92px 88px 140px 28px;
+}
+
+/* 3-Column Cavern Layout: Left Ledge | Open Central Shaft | Right Ledge */
+.sector-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 356px minmax(0, 1fr);
+  gap: 0;
+  align-items: start;
+  margin-bottom: 135px;
+  position: relative;
+}
+
+.sector-row--surface {
+  margin-bottom: 150px;
+}
+
+.ledge-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.shaft-spacer {
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  pointer-events: none;
+}
+
+.shaft-depth-marker {
+  margin-top: 6px;
+  padding: 3px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--lantern-warm);
+  background: rgba(7, 3, 5, 0.88);
+  border: 1px solid rgba(255, 58, 86, 0.5);
+  border-radius: 99px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.8);
+}
+
+/* Cavern Chamber Cards */
+.chamber-card {
+  position: relative;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-sealed);
+  border-radius: 6px;
+  padding: 22px 24px;
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.78),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  opacity: 0.64;
+  transform: translateY(10px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    background-color 0.4s ease;
+}
+
+/* Timber support beam accent right underneath every cavern card */
+.chamber-card::after {
+  content: '';
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  bottom: -9px;
+  height: 8px;
+  background: #050203;
+  border-top: 1px solid rgba(255, 56, 84, 0.25);
+  border-radius: 2px;
+}
+
+.sector-row.is-unlocked .chamber-card,
+.sector-row--surface .chamber-card {
+  opacity: 1;
+  transform: translateY(0);
+  background: var(--panel-bg-unlocked);
+  border-color: var(--border-unlocked);
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.86),
+    0 0 26px rgba(255, 34, 66, 0.16),
+    inset 0 1px 0 rgba(255, 244, 214, 0.12);
+}
+
+.chamber-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chamber-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--crimson-bright);
+}
+
+.chamber-status {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.sector-row.is-unlocked .chamber-status,
+.sector-row--surface .chamber-status {
+  background: rgba(255, 34, 66, 0.2);
+  color: var(--lantern-warm);
+  border-color: rgba(255, 71, 98, 0.55);
+}
+
+.chamber-title {
+  font-family: var(--font-display);
+  font-size: 1.62rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.hero-headline {
+  font-size: 0.96rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+/* Contact & Link Chips */
+.contact-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.chip-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.chip-link:hover {
+  background: rgba(255, 34, 66, 0.26);
+  border-color: var(--lantern-warm);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.chip-link--primary {
+  background: linear-gradient(135deg, #cf122d 0%, #8f081b 100%);
+  border-color: #ff6178;
+  font-weight: 700;
+}
+
+/* Skill Groups & Glowing Badges (Style #1 Mockup) */
+.skill-group {
+  margin-bottom: 16px;
+}
+
+.skill-group:last-child {
+  margin-bottom: 0;
+}
+
+.skill-group-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lantern-warm);
+  margin-bottom: 8px;
+}
+
+.skill-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.skill-pill {
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: all 0.16s ease;
+}
+
+.skill-pill--accent {
+  background: rgba(255, 34, 66, 0.16);
+  border-color: rgba(255, 78, 104, 0.55);
+  color: #fff8ee;
+}
+
+.skill-pill:hover {
+  border-color: var(--lantern-warm);
+  background: rgba(255, 34, 66, 0.32);
+  transform: translateY(-1px);
+}
+
+/* Experience & Education Timeline */
+.timeline-item {
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.timeline-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.timeline-role {
+  font-family: var(--font-display);
+  font-size: 1.28rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+}
+
+.timeline-period {
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  color: var(--lantern-warm);
+  background: rgba(255, 34, 66, 0.16);
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
+.timeline-org {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--crimson-bright);
+  margin-bottom: 8px;
+}
+
+.bullet-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.bullet-list li {
+  position: relative;
+  padding-left: 15px;
+  font-size: 0.87rem;
+  line-height: 1.52;
+  color: var(--text-secondary);
+}
+
+.bullet-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--crimson-bright);
+  font-weight: 700;
+}
+
+/* Featured Showcase Box (Complete Games Compilation) */
+.compilation-banner {
+  margin-top: 14px;
+  padding: 15px 16px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, rgba(210, 18, 46, 0.25) 0%, rgba(16, 5, 8, 0.9) 100%);
+  border: 1px solid rgba(255, 85, 110, 0.55);
+}
+
+.compilation-banner p {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 6px 0 12px;
+}
+
+/* Project Vault Cards */
+.project-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.project-name {
+  font-family: var(--font-display);
+  font-size: 1.42rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.project-sub {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--crimson-bright);
+  margin-top: 2px;
+}
+
+.stat-badge {
+  font-family: var(--font-mono);
+  font-size: 0.69rem;
+  font-weight: 700;
+  color: var(--lantern-warm);
+  background: rgba(255, 34, 66, 0.22);
+  border: 1px solid rgba(255, 92, 116, 0.55);
+  padding: 3px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0 12px;
+}
+
+.tech-tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--lantern-warm);
+  border: 1px solid rgba(255, 244, 214, 0.2);
+}
+
+.project-footer {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Achievements Grid */
+.achievement-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+}
+
+.achievement-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.achievement-badge {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.69rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 3px;
+  background: rgba(255, 34, 66, 0.24);
+  border: 1px solid rgba(255, 86, 112, 0.6);
+  color: var(--lantern-warm);
+}
+
+.achievement-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+}
+
+.achievement-detail {
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Bottom Core Chest Finale */
+.core-finale {
+  max-width: 760px;
+  margin: 30px auto 0;
+  text-align: center;
+  background: rgba(10, 4, 7, 0.94);
+  border: 1px solid rgba(255, 76, 102, 0.7);
+  border-radius: 8px;
+  padding: 32px 28px;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.9),
+    0 0 40px rgba(255, 34, 66, 0.28);
+}
+
+.core-finale .contact-grid {
+  justify-content: center;
+  margin-top: 18px;
+}
+
+/* Clean Recruiter Quick-Read Dossier Modal */
+.dossier-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(5, 2, 3, 0.86);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.dossier-backdrop[hidden] {
+  display: none;
+}
+
+.dossier-modal {
+  width: 100%;
+  max-width: 920px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: #0d0608;
+  border: 1px solid rgba(255, 72, 98, 0.6);
+  border-radius: 8px;
+  padding: 32px 36px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.95);
+}
+
+.dossier-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding-bottom: 18px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.dossier-section {
+  margin-bottom: 22px;
+}
+
+.dossier-section h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--crimson-bright);
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 4px;
+}
+
+.dossier-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+/* Toast Notification */
+.excavation-toast {
+  position: fixed;
+  bottom: 22px;
+  left: 24px;
+  z-index: 50;
+  padding: 10px 16px;
+  background: rgba(10, 4, 6, 0.94);
+  border-left: 4px solid var(--crimson);
+  border-top: 1px solid rgba(255, 244, 214, 0.3);
+  border-right: 1px solid rgba(255, 244, 214, 0.3);
+  border-bottom: 1px solid rgba(255, 244, 214, 0.3);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.77rem;
+  color: var(--lantern-warm);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.85);
+  transform: translateY(18px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s ease;
+}
+
+.excavation-toast.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1180px) {
+  .sector-row {
+    grid-template-columns: minmax(0, 1fr) 280px minmax(0, 1fr);
+  }
+  .hud-role {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .btn-label-full {
+    display: none;
+  }
+  .btn-label-short {
+    display: inline;
+  }
+
+  .hud-topbar {
+    height: auto;
+    min-height: 54px;
+    padding: 6px 10px;
+    gap: 6px;
+  }
+
+  .hud-name {
+    font-size: 1.12rem;
+  }
+
+  .hud-slash {
+    display: none;
+  }
+
+  .hud-telemetry {
+    gap: 6px;
+    margin-left: auto;
+  }
+
+  .depth-pill {
+    padding: 4px 7px;
+    font-size: 0.7rem;
+    gap: 4px;
+  }
+
+  .hud-actions {
+    gap: 5px;
+  }
+
+  .hud-btn {
+    padding: 6px 8px;
+    font-size: 0.68rem;
+    min-height: 34px;
+  }
+
+  .depth-ruler {
+    display: none;
+  }
+
+  /* Leave left 86px completely clear for the live 2D Cave Digging Shaft on mobile! */
+  .mine-world {
+    padding: 72px 12px 96px 94px;
+  }
+
+  .sector-row {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 64px;
+  }
+
+  .sector-row--surface {
+    margin-bottom: 68px;
+  }
+
+  .shaft-spacer {
+    order: -1;
+    min-height: 0;
+    align-items: flex-start;
+  }
+
+  .shaft-depth-marker {
+    margin-top: 0;
+    font-size: 0.66rem;
+    padding: 2px 9px;
+  }
+
+  .chamber-card {
+    padding: 16px 15px;
+  }
+
+  .chamber-title {
+    font-size: 1.35rem;
+  }
+
+  .project-top {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .project-name {
+    font-size: 1.24rem;
+  }
+
+  .bullet-list li {
+    font-size: 0.82rem;
+    line-height: 1.48;
+  }
+
+  .chip-link {
+    padding: 7px 10px;
+    font-size: 0.72rem;
+  }
+
+  .core-finale {
+    padding: 22px 16px;
+  }
+
+  .dossier-backdrop {
+    padding: 10px;
+  }
+
+  .dossier-modal {
+    padding: 20px 16px;
+    max-height: 92vh;
+  }
+
+  .dossier-top {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .dossier-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .excavation-toast {
+    left: 92px;
+    right: 10px;
+    bottom: 14px;
+    font-size: 0.7rem;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 420px) {
+  /* Matches 74px compact shaft strip on narrow phones */
+  .mine-world {
+    padding: 68px 8px 88px 80px;
+  }
+
+  .hud-name {
+    font-size: 0.98rem;
+  }
+
+  .depth-label {
+    display: none;
+  }
+
+  .hud-btn {
+    padding: 5px 6px;
+    font-size: 0.64rem;
+  }
+
+  .chamber-card {
+    padding: 14px 12px;
+  }
+
+  .excavation-toast {
+    left: 78px;
+  }
+}
