@@ -1,7 +1,35 @@
 import './styles/main.css';
-import { RESUME_DATA, ProjectItem, SkillCategory } from './data/resumeData';
+import {
+  RESUME_DATA,
+  GameEngineItem,
+  ProjectItem,
+  PublishedGameItem,
+  SkillCategory,
+} from './data/resumeData';
 import { MinerGameCanvas, SectorAnchor } from './engine/MinerGameCanvas';
 import { minerSfx } from './audio/sfx';
+
+function renderGameEngines(engines: GameEngineItem[]): string {
+  return `
+    <div class="skill-group">
+      <div class="skill-group-title">Game Engines</div>
+      <div class="engine-grid">
+        ${engines
+          .map(
+            (eng) => `
+          <div class="engine-badge">
+            <span class="engine-logo-box">
+              <img src="${eng.logoUrl}" alt="${eng.name} logo" class="engine-logo-img" />
+            </span>
+            <span class="engine-name">${eng.name}</span>
+          </div>
+        `
+          )
+          .join('')}
+      </div>
+    </div>
+  `;
+}
 
 function renderSkillGroups(groups: SkillCategory[]): string {
   return groups
@@ -13,7 +41,11 @@ function renderSkillGroups(groups: SkillCategory[]): string {
           ${g.items
             .map(
               (skill) =>
-                `<span class="skill-pill ${g.accent ? 'skill-pill--accent' : ''}">${skill}</span>`
+                `<span class="skill-pill ${g.accent ? 'skill-pill--accent' : ''} ${skill.iconUrl ? 'skill-pill--with-icon' : ''}">${
+                  skill.iconUrl
+                    ? `<img src="${skill.iconUrl}" alt="" class="skill-pill-icon" aria-hidden="true" />`
+                    : ''
+                }<span>${skill.name}</span></span>`
             )
             .join('')}
         </div>
@@ -41,7 +73,55 @@ function renderProjectCard(proj: ProjectItem): string {
       </ul>
       <div class="project-footer">
         <a class="chip-link" href="${proj.githubUrl}" target="_blank" rel="noopener noreferrer">
-          <span>GitHub Repository</span>
+          <img src="/icons/github.svg" alt="" class="btn-inline-icon" aria-hidden="true" />
+          <span>GitHub</span>
+        </a>
+      </div>
+    </article>
+  `;
+}
+
+function renderPublishedGameCard(game: PublishedGameItem): string {
+  return `
+    <article class="chamber-card">
+      <div class="published-game-top">
+        <a
+          href="${game.playStoreUrl}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="game-logo-wrap"
+          aria-label="Open ${game.title} on Google Play"
+        >
+          <img
+            src="${game.logoUrl}"
+            alt="${game.title} official game logo"
+            class="game-logo-img"
+            loading="lazy"
+          />
+        </a>
+        <div class="published-game-meta">
+          <div class="published-game-title-row">
+            <h3 class="project-name">${game.title}</h3>
+            <span class="stat-badge">${game.badge}</span>
+          </div>
+          <div class="project-sub">${game.studio} • ${game.genre}</div>
+          <div class="project-tech published-game-tags">
+            ${game.tech.map((t) => `<span class="tech-tag">${t}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+      <ul class="bullet-list">
+        ${game.bullets.map((b) => `<li>${b}</li>`).join('')}
+      </ul>
+      <div class="project-footer">
+        <a
+          class="chip-link chip-link--primary"
+          href="${game.playStoreUrl}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src="/icons/googleplay.svg" alt="" class="btn-inline-icon" aria-hidden="true" />
+          <span>Google Play</span>
         </a>
       </div>
     </article>
@@ -72,9 +152,9 @@ function buildAppHTML(): string {
           <strong id="hud-depth-value">0m</strong>
         </div>
         <div class="hud-actions">
-          <button type="button" id="btn-sfx" class="hud-btn hud-btn--audio-ready" title="Toggle Sound On/Off">
-            <span class="btn-label-full">SOUND OFF</span>
-            <span class="btn-label-short">SOUND OFF</span>
+          <button type="button" id="btn-sfx" class="hud-btn" title="Toggle Sound On/Off">
+            <span class="btn-label-full">SOUND ON</span>
+            <span class="btn-label-short">SOUND ON</span>
           </button>
           <a href="${d.links.pdfDownload}" download="Pankaj_Kumar_CV.pdf" class="hud-btn">
             <span class="btn-label-full">DOWNLOAD PDF</span>
@@ -109,17 +189,12 @@ function buildAppHTML(): string {
             <h1 class="chamber-title" style="font-size: 2.15rem">${d.name}</h1>
             <p class="hero-headline">${d.headline}</p>
             <p class="hero-headline" style="margin-bottom: 12px; font-size: 0.88rem">
-              Building immersive <strong>Unity 6 &amp; OpenXR</strong> simulations, physics-driven VR combat, custom <strong>C# game engine architecture</strong>, and intelligent AI platforms.
+              Unity &amp; OpenXR gameplay systems, physics VR combat, commercial mobile games, and custom C# engine architecture.
             </p>
             <div class="contact-grid">
-              <a class="chip-link chip-link--primary" href="${d.links.gamesCompilation}" target="_blank" rel="noopener noreferrer">
-                Watch Games Compilation
-              </a>
-              <a class="chip-link" href="${d.links.github}" target="_blank" rel="noopener noreferrer">
-                GitHub (${d.links.githubHandle})
-              </a>
-              <a class="chip-link" href="${d.links.linkedin}" target="_blank" rel="noopener noreferrer">
-                LinkedIn
+              <a class="chip-link chip-link--primary" href="${d.links.github}" target="_blank" rel="noopener noreferrer">
+                <img src="/icons/github.svg" alt="" class="btn-inline-icon" aria-hidden="true" />
+                <span>GitHub</span>
               </a>
               <button type="button" class="chip-link" id="btn-copy-email" data-email="${d.email}">
                 ✉ Copy Email
@@ -137,12 +212,11 @@ function buildAppHTML(): string {
 
         <div class="ledge-col">
           <article class="chamber-card">
-            <h2 class="chamber-title">Career Highlights</h2>
+            <h2 class="chamber-title">Highlights</h2>
             <ul class="bullet-list">
-              <li><strong>AR/VR Intern @ IDZ Digital</strong> &amp; <strong>VR Lead @ AIT GDXR Club</strong> — shipping real-time 3D &amp; OpenXR interactions.</li>
-              <li><strong>1st Runner-up</strong> at <strong>IIIT Delhi × IGDA Game Jam</strong> &amp; <strong>2nd Runner-up</strong> at Arcade AR Competition.</li>
-              <li><strong>Custom C# Engine</strong>, 10-agent VR AI economy simulator, and multi-zone active-ragdoll VR combat.</li>
-              <li><strong>Scroll down</strong> to dig through subterranean cave strata, unlock resume chambers, and click cave bats to shoot.</li>
+              <li><strong>AR/VR Intern @ IDZ Digital</strong> &amp; <strong>VR Lead @ AIT GDXR Club</strong>.</li>
+              <li><strong>3 Live Google Play Games</strong> shipped across arcade action, 3D stunts &amp; kids learning.</li>
+              <li><strong>1st Runner-up</strong> at IIIT Delhi × IGDA Game Jam &amp; <strong>2nd Runner-up</strong> at Arcade AR.</li>
             </ul>
           </article>
         </div>
@@ -152,7 +226,8 @@ function buildAppHTML(): string {
       <section id="sector-skills" class="sector-row" data-sector-id="sector-skills">
         <div class="ledge-col">
           <article class="chamber-card">
-            <h2 class="chamber-title">Skills Unlocked: Game &amp; XR</h2>
+            <h2 class="chamber-title">Game &amp; XR Skills</h2>
+            ${renderGameEngines(d.gameEngines)}
             ${renderSkillGroups(d.skillCategoriesLeft)}
           </article>
         </div>
@@ -163,7 +238,7 @@ function buildAppHTML(): string {
 
         <div class="ledge-col">
           <article class="chamber-card">
-            <h2 class="chamber-title">CS Core, Backend &amp; AI Tools</h2>
+            <h2 class="chamber-title">Languages &amp; Tech Stack</h2>
             ${renderSkillGroups(d.skillCategoriesRight)}
           </article>
         </div>
@@ -194,68 +269,106 @@ function buildAppHTML(): string {
         </div>
 
         <div class="shaft-spacer">
-          <span class="shaft-depth-marker">-240m // EXPERIENCE &amp; EDU</span>
+          <span class="shaft-depth-marker">-230m // EXPERIENCE &amp; EDU</span>
         </div>
 
         <div class="ledge-col">
           <article class="chamber-card">
             <h2 class="chamber-title">Education</h2>
-            <div class="timeline-item">
-              <div class="timeline-top">
-                <span class="timeline-role">${d.education.institution}</span>
-                <span class="timeline-period">${d.education.period}</span>
-              </div>
-              <div class="timeline-org">${d.education.degree} • ${d.education.location}</div>
-              <ul class="bullet-list">
-                <li>${d.education.cgpaNote}: <strong>${d.education.cgpa}</strong></li>
-              </ul>
-            </div>
-
-            <div class="compilation-banner">
-              <div class="timeline-role">${d.gamesCompilation.title}</div>
-              <p>${d.gamesCompilation.description}</p>
-              <a class="chip-link chip-link--primary" href="${d.gamesCompilation.url}" target="_blank" rel="noopener noreferrer">
-                View Complete Games Compilation
-              </a>
-            </div>
+            ${d.education
+              .map(
+                (edu) => `
+                <div class="timeline-item">
+                  <div class="timeline-top">
+                    <span class="timeline-role">${edu.institution}</span>
+                    ${edu.period ? `<span class="timeline-period">${edu.period}</span>` : ''}
+                  </div>
+                  <div class="timeline-org">${edu.degree} • ${edu.location}</div>
+                  <ul class="bullet-list">
+                    ${edu.bullets.map((b) => `<li>${b}</li>`).join('')}
+                  </ul>
+                </div>
+              `
+              )
+              .join('')}
           </article>
         </div>
       </section>
 
-      <!-- -400m: FLAGSHIP GAME & ENGINE VAULTS -->
+      <!-- -350m: PUBLISHED GAMES WORKED ON (GOOGLE PLAY) -->
+      <section id="sector-published-games" class="sector-row" data-sector-id="sector-published-games">
+        <div class="ledge-col">
+          <div class="ledge-heading">
+            <h2 class="chamber-title">Games Worked On</h2>
+            <p class="ledge-sub">Published commercial titles live on Google Play</p>
+          </div>
+          ${renderPublishedGameCard(d.publishedGames[0])}
+          ${renderPublishedGameCard(d.publishedGames[1])}
+        </div>
+
+        <div class="shaft-spacer">
+          <span class="shaft-depth-marker">-350m // GAMES WORKED ON</span>
+        </div>
+
+        <div class="ledge-col">
+          <div class="ledge-heading ledge-heading--desktop-only">
+            <h2 class="chamber-title">Live on Google Play</h2>
+            <p class="ledge-sub">Official Play Store releases &amp; interactive gameplay</p>
+          </div>
+          ${renderPublishedGameCard(d.publishedGames[2])}
+        </div>
+      </section>
+
+      <!-- -490m: PERSONAL PROJECTS (GAME ENGINE & VR) -->
       <section id="sector-games" class="sector-row" data-sector-id="sector-games">
         <div class="ledge-col">
+          <div class="ledge-heading">
+            <h2 class="chamber-title">Personal Projects</h2>
+            <p class="ledge-sub">Custom C# Game Engine &amp; Immersive VR Simulations</p>
+          </div>
           ${renderProjectCard(d.gameProjects[0])}
           ${renderProjectCard(d.gameProjects[2])}
         </div>
 
         <div class="shaft-spacer">
-          <span class="shaft-depth-marker">-400m // GAME &amp; XR VAULTS</span>
+          <span class="shaft-depth-marker">-490m // PERSONAL PROJECTS</span>
         </div>
 
         <div class="ledge-col">
+          <div class="ledge-heading ledge-heading--desktop-only">
+            <h2 class="chamber-title">VR &amp; Game Systems</h2>
+            <p class="ledge-sub">OpenXR Economy &amp; Physical Interactions</p>
+          </div>
           ${renderProjectCard(d.gameProjects[1])}
         </div>
       </section>
 
-      <!-- -560m: AI & FULL-STACK SOFTWARE PLATFORMS -->
+      <!-- -620m: AI & FULL-STACK SOFTWARE PLATFORMS -->
       <section id="sector-software" class="sector-row" data-sector-id="sector-software">
         <div class="ledge-col">
+          <div class="ledge-heading">
+            <h2 class="chamber-title">AI &amp; Backend Platforms</h2>
+            <p class="ledge-sub">Full-Stack Intelligence &amp; Autonomous Workflows</p>
+          </div>
           ${renderProjectCard(d.softwareProjects[0])}
           ${renderProjectCard(d.softwareProjects[2])}
         </div>
 
         <div class="shaft-spacer">
-          <span class="shaft-depth-marker">-560m // AI &amp; SYSTEMS</span>
+          <span class="shaft-depth-marker">-620m // AI &amp; SYSTEMS</span>
         </div>
 
         <div class="ledge-col">
+          <div class="ledge-heading ledge-heading--desktop-only">
+            <h2 class="chamber-title">Systems &amp; Architecture</h2>
+            <p class="ledge-sub">Batch Data Pipelines &amp; Transactional Ledgers</p>
+          </div>
           ${renderProjectCard(d.softwareProjects[1])}
           ${renderProjectCard(d.softwareProjects[3])}
         </div>
       </section>
 
-      <!-- -690m: TROPHIES & CRIMSON CORE -->
+      <!-- -750m: TROPHIES & CRIMSON CORE -->
       <section id="sector-achievements" class="sector-row" data-sector-id="sector-achievements" style="margin-bottom: 60px">
         <div class="ledge-col">
           <article class="chamber-card">
@@ -278,7 +391,7 @@ function buildAppHTML(): string {
         </div>
 
         <div class="shaft-spacer">
-          <span class="shaft-depth-marker">-690m // HALL OF RELICS</span>
+          <span class="shaft-depth-marker">-750m // HALL OF RELICS</span>
         </div>
 
         <div class="ledge-col">
@@ -314,14 +427,9 @@ function buildAppHTML(): string {
           <a class="chip-link chip-link--primary" href="mailto:${d.email}">
             ✉ Email Pankaj
           </a>
-          <a class="chip-link" href="${d.links.gamesCompilation}" target="_blank" rel="noopener noreferrer">
-            Games Compilation Reel
-          </a>
           <a class="chip-link" href="${d.links.github}" target="_blank" rel="noopener noreferrer">
-            GitHub (${d.links.githubHandle})
-          </a>
-          <a class="chip-link" href="${d.links.linkedin}" target="_blank" rel="noopener noreferrer">
-            LinkedIn
+            <img src="/icons/github.svg" alt="" class="btn-inline-icon" aria-hidden="true" />
+            <span>GitHub</span>
           </a>
           <a class="chip-link" href="${d.links.pdfDownload}" download="Pankaj_Kumar_CV.pdf">
             Download CV (PDF)
@@ -383,24 +491,40 @@ function initPortfolioApp(): void {
   }
 
   let userManuallyToggledAudio = false;
-  function unlockAudioOnFirstGesture(e: Event): void {
-    if (userManuallyToggledAudio || minerSfx.enabled) return;
-    if (btnSfx && e.target instanceof Node && btnSfx.contains(e.target)) return;
-    const on = minerSfx.enable();
-    updateAudioButtonUI(on);
+  function cleanupGestureAudioListeners(): void {
+    window.removeEventListener('pointerdown', resumeDefaultAudio, true);
+    window.removeEventListener('touchstart', resumeDefaultAudio, true);
+    window.removeEventListener('keydown', resumeDefaultAudio, true);
+    window.removeEventListener('wheel', resumeDefaultAudio, true);
+    window.removeEventListener('scroll', resumeDefaultAudio, true);
   }
 
-  // Capture phase ensures clicking a bat on the very first click plays the gunshot immediately!
-  window.addEventListener('pointerdown', unlockAudioOnFirstGesture, {
-    capture: true,
-    once: true,
-    passive: true,
+  function resumeDefaultAudio(e: Event): void {
+    if (userManuallyToggledAudio || !minerSfx.enabled) {
+      cleanupGestureAudioListeners();
+      return;
+    }
+    if (btnSfx && e.target instanceof Node && btnSfx.contains(e.target)) return;
+    minerSfx.resumeIfEnabled().then((playing) => {
+      if (playing) {
+        cleanupGestureAudioListeners();
+      }
+    });
+  }
+
+  // Sound is ON by default — start immediately on load, and keep fallback listeners active until BGM is playing
+  updateAudioButtonUI(true);
+  minerSfx.resumeIfEnabled().then((playing) => {
+    if (playing) {
+      cleanupGestureAudioListeners();
+    }
   });
-  window.addEventListener('keydown', unlockAudioOnFirstGesture, {
-    capture: true,
-    once: true,
-    passive: true,
-  });
+
+  window.addEventListener('pointerdown', resumeDefaultAudio, { capture: true, passive: true });
+  window.addEventListener('touchstart', resumeDefaultAudio, { capture: true, passive: true });
+  window.addEventListener('keydown', resumeDefaultAudio, { capture: true, passive: true });
+  window.addEventListener('wheel', resumeDefaultAudio, { capture: true, passive: true });
+  window.addEventListener('scroll', resumeDefaultAudio, { capture: true, passive: true });
 
   const engine = new MinerGameCanvas(canvas, {
     onSectorBreach: (sectorId) => {

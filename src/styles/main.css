@@ -455,6 +455,14 @@ body {
   font-weight: 700;
 }
 
+.btn-inline-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
 /* Skill Groups & Glowing Badges (Style #1 Mockup) */
 .skill-group {
   margin-bottom: 16px;
@@ -474,6 +482,58 @@ body {
   margin-bottom: 8px;
 }
 
+.engine-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.engine-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 8px 10px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(255, 34, 66, 0.2) 0%, rgba(16, 5, 9, 0.92) 100%);
+  border: 1px solid rgba(255, 82, 108, 0.58);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55);
+  transition: all 0.18s ease;
+}
+
+.engine-badge:hover {
+  border-color: var(--lantern-warm);
+  background: linear-gradient(135deg, rgba(255, 34, 66, 0.34) 0%, rgba(24, 7, 12, 0.95) 100%);
+  transform: translateY(-1px);
+}
+
+.engine-logo-box {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: rgba(8, 3, 5, 0.85);
+  border: 1px solid rgba(255, 244, 214, 0.24);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  flex-shrink: 0;
+}
+
+.engine-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.engine-name {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff8ee;
+}
+
 .skill-pills {
   display: flex;
   flex-wrap: wrap;
@@ -481,15 +541,30 @@ body {
 }
 
 .skill-pill {
-  padding: 5px 10px;
-  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 11px;
+  border-radius: 5px;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-size: 0.76rem;
+  font-weight: 600;
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.18);
   transition: all 0.16s ease;
+}
+
+.skill-pill--with-icon {
+  padding-left: 9px;
+}
+
+.skill-pill-icon {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
 }
 
 .skill-pill--accent {
@@ -649,6 +724,89 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+}
+
+/* Published Games Worked On (Google Play Showcase) */
+.ledge-heading {
+  padding: 2px 4px 2px 2px;
+  opacity: 0.68;
+  transform: translateY(8px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sector-row.is-unlocked .ledge-heading {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ledge-heading .chamber-title {
+  margin-bottom: 2px;
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.92);
+}
+
+.ledge-sub {
+  font-size: 0.85rem;
+  color: var(--lantern-warm);
+  opacity: 0.88;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.92);
+}
+
+.published-game-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.game-logo-wrap {
+  flex-shrink: 0;
+  width: 74px;
+  height: 74px;
+  border-radius: 17px;
+  overflow: hidden;
+  border: 1.5px solid rgba(255, 244, 214, 0.35);
+  background: #0d0407;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.72),
+    0 0 16px rgba(255, 34, 66, 0.22);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.game-logo-wrap:hover {
+  transform: translateY(-2px) scale(1.03);
+  border-color: var(--lantern-warm);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.82),
+    0 0 20px rgba(255, 58, 88, 0.45);
+}
+
+.game-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.03);
+}
+
+.published-game-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.published-game-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.published-game-tags {
+  margin: 8px 0 0;
 }
 
 /* Achievements Grid */
@@ -895,6 +1053,25 @@ body {
   .project-top {
     flex-direction: column;
     gap: 6px;
+  }
+
+  .ledge-heading--desktop-only {
+    display: none;
+  }
+
+  .published-game-top {
+    gap: 12px;
+  }
+
+  .game-logo-wrap {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+  }
+
+  .published-game-title-row {
+    flex-direction: column;
+    gap: 5px;
   }
 
   .project-name {

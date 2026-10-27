@@ -1,0 +1,204 @@
+%-------------------------
+% Resume in LaTeX (Overleaf compatible)
+% Author: Pankaj Kumar
+% Based on: Jake's Resume Template (ATS-Friendly)
+%------------------------
+
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{charter}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.55in}
+\addtolength{\evensidemargin}{-0.55in}
+\addtolength{\textwidth}{1.1in}
+\addtolength{\topmargin}{-.6in}
+\addtolength{\textheight}{1.2in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-5pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-4pt}]
+
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-6pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-6pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.15in]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\Huge \scshape Pankaj Kumar} \\ \vspace{2pt}
+    \textbf{Game Development \textbar{} C\# / Unity \textbar{} VR / XR} \\ \vspace{2pt}
+    \small +91 7451042661 \textbar{} 
+    \href{mailto:pankajkumar_240666@aitpune.edu.in}{\underline{pankajkumar\_240666@aitpune.edu.in}} \textbar{} 
+    \href{https://github.com/BloodyPrince7}{\underline{github.com/BloodyPrince7}}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Army Institute of Technology}{Pune, Maharashtra}
+      {Bachelor of Engineering in Electronics \& Telecommunication; CGPA: 7.82/10 (Sem I--IV)}{2024 -- 2028}
+    \resumeSubheading
+      {Army Public School}{Mathura Cantt, UP}
+      {Senior Secondary (Class XII: 80\%) \& High School (Class X: 94.60\%), CBSE}{Completed}
+  \resumeSubHeadingListEnd
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Game Engines:} Unity (Unity 6), Unreal Engine \\
+     \textbf{XR \& 3D Development:} OpenXR, XR Interaction Toolkit, Auto Hand, VR / Meta Quest, Blender, Android \\
+     \textbf{Gameplay \& Systems:} Physics \& Ragdoll Systems, State Machines (FSM), Collision Detection, URP Shaders \\
+     \textbf{Programming Languages:} C\#, Python, Java, TypeScript, JavaScript \\
+     \textbf{Backend \& Dev Tools:} Git, Docker, FastAPI, Spring Boot, PostgreSQL, Google Gemini Multimodal API
+    }}
+ \end{itemize}
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {AR/VR Intern}{Aug 2025 -- Jan 2026}
+      {IDZ Digital Private Limited}{Remote}
+      \resumeItemListStart
+        \resumeItem{Developed interactive 2D/3D and AR/VR gameplay features in Unity and C\# for commercial mobile applications.}
+        \resumeItem{Worked with 3D asset pipelines, real-time physics interactions, and mobile runtime optimizations.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {VR Lead -- GDXR Club}{Aug 2024 -- Present}
+      {Army Institute of Technology}{Pune, India}
+      \resumeItemListStart
+        \resumeItem{Leading VR and interactive 3D game development initiatives using Unity, OpenXR, and Blender.}
+        \resumeItem{Coordinating technical architecture, gameplay prototyping, and asset workflows for student game jams and club projects.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-----------PUBLISHED GAMES-----------
+\section{Published Commercial Games (Google Play Store)}
+  \resumeSubHeadingListStart
+
+    \resumeProjectHeading
+      {\textbf{Bomb Bash -- Arcade Bomb Action} \textbar{} \emph{Drox Studio} \textbar{} \href{https://play.google.com/store/apps/details?id=com.drox.bombbash&hl=en_IN}{\underline{Google Play (4.8 $\bigstar$)}}}{Unity, C\#, Android}
+      \resumeItemListStart
+        \resumeItem{Shipped fast-paced arcade action combat game featuring timed explosive mechanics, enemy wave algorithms, and arena survival loops on Android.}
+      \resumeItemListEnd
+
+    \resumeProjectHeading
+      {\textbf{Car Stunt Driving Simulator} \textbar{} \emph{Drox Studio} \textbar{} \href{https://play.google.com/store/apps/details?id=com.drox.carstuntsimulator&hl=en_IN}{\underline{Google Play}}}{Unity 3D, C\#, Vehicle Physics}
+      \resumeItemListStart
+        \resumeItem{Developed 3D stunt driving simulation featuring extreme mega-ramps, mid-air vehicle orientation controls, obstacle courses, and precision landing physics.}
+      \resumeItemListEnd
+
+    \resumeProjectHeading
+      {\textbf{Panda Preschool Baby Games} \textbar{} \emph{IDZ Digital} \textbar{} \href{https://play.google.com/store/apps/details?id=iz.com.baby.panda.preschool.kids.learning.toddler.town.games&hl=en_IN}{\underline{Google Play (4.4 $\bigstar$)}}}{Unity, C\#, Touch UI}
+      \resumeItemListStart
+        \resumeItem{Commercial educational title featuring 100+ interactive learning mini-games, tactile puzzles, and responsive 2D/3D touch mechanics for early childhood audiences.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-----------PERSONAL PROJECTS-----------
+\section{Personal Projects}
+  \resumeSubHeadingListStart
+
+    \resumeProjectHeading
+      {\textbf{RCoreEngine -- Custom C\# Game Engine} \textbar{} \href{https://github.com/BloodyPrince7/RCoreEngine}{\underline{GitHub}}}{C\#, Game Engine Architecture, OOP}
+      \resumeItemListStart
+        \resumeItem{Architected a custom C\# game engine from scratch featuring a decoupled real-time game loop with deterministic fixed updates and delta-time compensation.}
+        \resumeItem{Built an extensible Component-Entity architecture supporting dynamic lifecycle states (Awake, Start, Update, OnDestroy) and inter-component message routing.}
+        \resumeItem{Engineered core engine subsystems including transform hierarchy trees, custom vector math utilities, and low-allocation memory structures.}
+      \resumeItemListEnd
+
+    \resumeProjectHeading
+      {\textbf{FarmMarketVR -- VR Farm-to-Shop Simulator} \textbar{} \href{https://github.com/learnyTown/innovationteam-FarmMarketVR}{\underline{GitHub}}}{Unity 6, C\#, OpenXR, Auto Hand, FSM AI}
+      \resumeItemListStart
+        \resumeItem{Built an immersive VR store simulation featuring crop cultivation, harvesting, inventory systems, physical shelf stocking, dynamic pricing, and cashier checkout.}
+        \resumeItem{Engineered an FSM AI system driving up to 10 autonomous customer NPCs across shelf searching, queue navigation, price evaluation, and collision avoidance.}
+        \resumeItem{Implemented tactile physics with Auto Hand and OpenXR, including two-handed interactions, haptic feedback, and dual VR/desktop controller support.}
+      \resumeItemListEnd
+
+    \resumeProjectHeading
+      {\textbf{NPC Punch Hit VR -- Physics VR Combat Prototype} \textbar{} \href{https://github.com/learnyTown/innovationteam-npcPunchHitVR}{\underline{GitHub}}}{Unity VR, C\#, Auto Hand, Active Ragdoll}
+      \resumeItemListStart
+        \resumeItem{Developed physics-based VR combat prototype using Auto Hand with custom collision layers supporting force transfer across punches, melee weapons, and projectiles.}
+        \resumeItem{Engineered directional hit detection across 4 discrete body zones (Head, Chest, Back, Legs) with impact thresholds to trigger context-aware stagger reactions.}
+        \resumeItem{Implemented hybrid active-ragdoll physics combining configurable joint drives with keyframe animations for balance recovery and procedural knockdowns.}
+      \resumeItemListEnd
+
+    \resumeProjectHeading
+      {\textbf{FinLens -- AI Financial Intelligence Platform} \textbar{} \href{https://github.com/BloodyPrince7/FinLens}{\underline{GitHub}}}{React, FastAPI, Python, Docker, Gemini API}
+      \resumeItemListStart
+        \resumeItem{Engineered a containerized financial document intelligence platform with React, asynchronous FastAPI, SQLite, and Docker using authenticated JWT REST APIs.}
+        \resumeItem{Integrated Google Gemini Multimodal APIs with OCR pipelines to parse unstructured invoices, balance sheets, and receipts into structured financial metrics.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-----------HONORS & ACHIEVEMENTS-----------
+\section{Honors \& Achievements}
+  \resumeItemListStart
+    \resumeItem{\textbf{1st Runner-up} -- IIIT Delhi $\times$ IGDA Game Jam (National level game development competition).}
+    \resumeItem{\textbf{2nd Runner-up} -- Arcade (AR-based interactive lens-making competition).}
+    \resumeItem{\textbf{200+ LeetCode Problems Solved} -- Demonstrated proficiency across Data Structures, Algorithms, and competitive problem solving.}
+    \resumeItem{\textbf{National Finalist} -- Paytm AI Hackathon.}
+    \resumeItem{\textbf{3$\times$ Finalist} -- Innerve 9, Vinhack at VIT Vellore, and Imaginate at Solution 2K25.}
+  \resumeItemListEnd
+
+\end{document}
