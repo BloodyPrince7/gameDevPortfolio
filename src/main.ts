@@ -56,6 +56,21 @@ function renderSkillGroups(groups: SkillCategory[]): string {
 }
 
 function renderProjectCard(proj: ProjectItem): string {
+  const videoEmbed = proj.youtubeId
+    ? `
+      <div class="project-video-container">
+        <iframe
+          class="project-video-iframe"
+          src="https://www.youtube-nocookie.com/embed/${proj.youtubeId}?rel=0"
+          title="${proj.title} Demo Video"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+      </div>
+    `
+    : '';
+
   return `
     <article class="chamber-card">
       <div class="project-top">
@@ -65,6 +80,7 @@ function renderProjectCard(proj: ProjectItem): string {
         </div>
         ${proj.highlightStat ? `<span class="stat-badge">${proj.highlightStat}</span>` : ''}
       </div>
+      ${videoEmbed}
       <div class="project-tech">
         ${proj.tech.map((t) => `<span class="tech-tag">${t}</span>`).join('')}
       </div>
@@ -72,6 +88,13 @@ function renderProjectCard(proj: ProjectItem): string {
         ${proj.bullets.map((b) => `<li>${b}</li>`).join('')}
       </ul>
       <div class="project-footer">
+        ${
+          proj.youtubeUrl
+            ? `<a class="chip-link chip-link--primary" href="${proj.youtubeUrl}" target="_blank" rel="noopener noreferrer">
+                 <span>▶ Watch on YouTube</span>
+               </a>`
+            : ''
+        }
         <a class="chip-link" href="${proj.githubUrl}" target="_blank" rel="noopener noreferrer">
           <img src="/icons/github.svg" alt="" class="btn-inline-icon" aria-hidden="true" />
           <span>GitHub</span>
@@ -143,23 +166,10 @@ function buildAppHTML(): string {
       </a>
 
       <div class="hud-telemetry">
-        <div class="depth-pill" title="Cave Bats Hunted with Revolver">
-          <span>🦇</span>
-          <strong id="hud-bats-value">0</strong>
-        </div>
-        <div class="depth-pill">
-          <span class="depth-label">DEPTH:</span>
-          <strong id="hud-depth-value">0m</strong>
-        </div>
         <div class="hud-actions">
-          <button type="button" id="btn-sfx" class="hud-btn" title="Toggle Sound On/Off">
-            <span class="btn-label-full">SOUND ON</span>
-            <span class="btn-label-short">SOUND ON</span>
+          <button type="button" id="btn-sfx" class="hud-btn hud-btn--speaker" title="Toggle Sound (Mute/Unmute)" aria-label="Toggle Sound">
+            <span id="btn-sfx-icon" aria-hidden="true">🔊</span>
           </button>
-          <a href="${d.links.pdfDownload}" download="Pankaj_Kumar_CV.pdf" class="hud-btn">
-            <span class="btn-label-full">DOWNLOAD PDF</span>
-            <span class="btn-label-short">PDF</span>
-          </a>
         </div>
       </div>
     </header>
@@ -214,8 +224,8 @@ function buildAppHTML(): string {
           <article class="chamber-card">
             <h2 class="chamber-title">Highlights</h2>
             <ul class="bullet-list">
-              <li><strong>AR/VR Intern @ IDZ Digital</strong> &amp; <strong>VR Lead @ AIT GDXR Club</strong>.</li>
-              <li><strong>3 Live Google Play Games</strong> shipped across arcade action, 3D stunts &amp; kids learning.</li>
+              <li><strong>Game Dev Intern @ IDZ Digital</strong>, <strong>Game Dev @ Drox Studio</strong> &amp; <strong>VR Lead @ AIT GDXR Club</strong>.</li>
+              <li><strong>Contributed to 3 commercial mobile games</strong> on Google Play across arcade action, 3D vehicle stunts &amp; casual salon games.</li>
               <li><strong>1st Runner-up</strong> at IIIT Delhi × IGDA Game Jam &amp; <strong>2nd Runner-up</strong> at Arcade AR.</li>
             </ul>
           </article>
@@ -319,52 +329,49 @@ function buildAppHTML(): string {
         </div>
       </section>
 
-      <!-- -490m: PERSONAL PROJECTS (GAME ENGINE & VR) -->
+      <!-- -490m: VR PROJECTS -->
       <section id="sector-games" class="sector-row" data-sector-id="sector-games">
         <div class="ledge-col">
           <div class="ledge-heading">
-            <h2 class="chamber-title">Personal Projects</h2>
-            <p class="ledge-sub">Custom C# Game Engine &amp; Immersive VR Simulations</p>
+            <h2 class="chamber-title">VR Projects</h2>
+            <p class="ledge-sub">Immersive OpenXR Physical Interactions &amp; Economy Simulation</p>
           </div>
           ${renderProjectCard(d.gameProjects[0])}
-          ${renderProjectCard(d.gameProjects[2])}
         </div>
 
         <div class="shaft-spacer">
-          <span class="shaft-depth-marker">-490m // PERSONAL PROJECTS</span>
+          <span class="shaft-depth-marker">-490m // VR PROJECTS</span>
         </div>
 
         <div class="ledge-col">
           <div class="ledge-heading ledge-heading--desktop-only">
-            <h2 class="chamber-title">VR &amp; Game Systems</h2>
-            <p class="ledge-sub">OpenXR Economy &amp; Physical Interactions</p>
+            <h2 class="chamber-title">VR Projects</h2>
+            <p class="ledge-sub">Physics-Driven Haptic Combat &amp; Dynamic AI</p>
           </div>
           ${renderProjectCard(d.gameProjects[1])}
         </div>
       </section>
 
-      <!-- -620m: AI & FULL-STACK SOFTWARE PLATFORMS -->
+      <!-- -620m: SOFTWARE & BACKEND SYSTEMS -->
       <section id="sector-software" class="sector-row" data-sector-id="sector-software">
         <div class="ledge-col">
           <div class="ledge-heading">
-            <h2 class="chamber-title">AI &amp; Backend Platforms</h2>
-            <p class="ledge-sub">Full-Stack Intelligence &amp; Autonomous Workflows</p>
+            <h2 class="chamber-title">Media Automation</h2>
+            <p class="ledge-sub">Batch Video &amp; Asset Transcoding Pipeline</p>
           </div>
           ${renderProjectCard(d.softwareProjects[0])}
-          ${renderProjectCard(d.softwareProjects[2])}
         </div>
 
         <div class="shaft-spacer">
-          <span class="shaft-depth-marker">-620m // AI &amp; SYSTEMS</span>
+          <span class="shaft-depth-marker">-620m // SOFTWARE &amp; SYSTEMS</span>
         </div>
 
         <div class="ledge-col">
           <div class="ledge-heading ledge-heading--desktop-only">
-            <h2 class="chamber-title">Systems &amp; Architecture</h2>
-            <p class="ledge-sub">Batch Data Pipelines &amp; Transactional Ledgers</p>
+            <h2 class="chamber-title">Backend Architecture</h2>
+            <p class="ledge-sub">Double-Entry ACID Financial Ledger Engine</p>
           </div>
           ${renderProjectCard(d.softwareProjects[1])}
-          ${renderProjectCard(d.softwareProjects[3])}
         </div>
       </section>
 
@@ -483,11 +490,13 @@ function initPortfolioApp(): void {
   function updateAudioButtonUI(isOn: boolean): void {
     if (!btnSfx) return;
     btnSfx.classList.remove('hud-btn--audio-ready');
-    const label = isOn ? 'SOUND ON' : 'SOUND OFF';
-    const full = btnSfx.querySelector('.btn-label-full');
-    const short = btnSfx.querySelector('.btn-label-short');
-    if (full) full.textContent = label;
-    if (short) short.textContent = label;
+    const icon = btnSfx.querySelector('#btn-sfx-icon');
+    if (icon) {
+      icon.textContent = isOn ? '🔊' : '🔇';
+    }
+    btnSfx.title = isOn ? 'Sound: On (Click to Mute)' : 'Sound: Muted (Click to Unmute)';
+    btnSfx.setAttribute('aria-label', isOn ? 'Mute sound' : 'Unmute sound');
+    btnSfx.classList.toggle('is-muted', !isOn);
   }
 
   let userManuallyToggledAudio = false;

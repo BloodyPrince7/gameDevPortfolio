@@ -38,6 +38,8 @@ export interface ProjectItem {
   bullets: string[];
   githubUrl: string;
   highlightStat?: string;
+  youtubeUrl?: string;
+  youtubeId?: string;
 }
 
 export interface PublishedGameItem {
@@ -150,12 +152,21 @@ export const RESUME_DATA = {
   ] as SkillCategory[],
   experience: [
     {
-      role: 'AR/VR Intern',
+      role: 'Game Dev Intern',
       company: 'IDZ Digital Private Limited',
       location: 'Remote',
       period: 'Aug 2025 – Jan 2026',
       bullets: [
         'Built interactive 2D/3D and AR/VR gameplay features in Unity and C# for commercial applications.',
+      ],
+    },
+    {
+      role: 'Game Developer Intern',
+      company: 'Drox Studio',
+      location: 'Startup',
+      period: 'Jun 2025 – Jul 2025',
+      bullets: [
+        'Directly developed core gameplay systems and vehicle physics for commercial mobile titles Bomb Bash and Car Stunt Driving Simulator.',
       ],
     },
     {
@@ -195,89 +206,52 @@ export const RESUME_DATA = {
       ],
     },
     {
-      title: 'Panda Preschool Baby Games',
-      studio: 'IDZ Digital Private Limited',
-      genre: 'Educational • Kids',
-      logoUrl: '/games/panda-preschool.png',
+      title: 'Timpy Nail Salon: Acrylic Nails',
+      studio: 'IDZ Digital / Timpy Games',
+      genre: 'Casual • Kids Salon',
+      logoUrl: '/games/timpy-nail-salon.png',
       playStoreUrl:
-        'https://play.google.com/store/apps/details?id=iz.com.baby.panda.preschool.kids.learning.toddler.town.games&hl=en_IN',
-      badge: '4.4 ★ PLAY STORE',
-      tech: ['Unity', 'C#', '100+ Mini-Games', 'Android'],
+        'https://play.google.com/store/apps/details?id=com.tz.nail.salon.art.nails.design.girl.games&hl=en_IN',
+      badge: '4.0 ★ PLAY STORE',
+      tech: ['Unity', 'C#', 'Touch Interactions', 'Android'],
       bullets: [
-        'Commercial kids title featuring 100+ interactive learning mini-games and touch-driven puzzles.',
+        'Commercial salon game featuring interactive acrylic nail styling, painting mechanics, art design, and responsive touch feedback.',
       ],
     },
   ] as PublishedGameItem[],
   gameProjects: [
     {
-      title: 'RCoreEngine',
-      subtitle: 'Custom C# Game Engine',
-      category: 'game',
-      highlightStat: 'Modular Engine Core',
-      tech: ['C#', 'Game Engine Architecture', 'Deterministic Game Loop', 'Component System', 'OOP'],
-      bullets: [
-        'Architected a custom C# game engine from scratch featuring a decoupled real-time game loop with deterministic fixed updates, variable rendering ticks, and delta-time compensation.',
-        'Built an extensible Component-Entity architecture supporting dynamic lifecycle states (Awake, Start, Update, OnDestroy) and inter-component message dispatching.',
-        'Engineered core engine subsystems including transform hierarchy trees, custom vector math utilities, spatial partitioning, and low-allocation memory structures.',
-        'Applied strict OOP principles, interface segregation, and design patterns (Singleton, Factory) for testable and maintainable engine code.',
-      ],
-      githubUrl: 'https://github.com/BloodyPrince7/RCoreEngine',
-    },
-    {
-      title: 'FarmMarketVR',
+      title: 'FarmMarket VR',
       subtitle: 'VR Farm-to-Shop Simulator',
       category: 'game',
-      highlightStat: '10 Concurrent AI Shoppers',
-      tech: ['Unity 6', 'C#', 'OpenXR', 'XR Interaction Toolkit', 'Auto Hand', 'FSM AI', 'URP'],
+      highlightStat: '10 AI Customers',
+      tech: ['Unity 6', 'C#', 'OpenXR', 'Auto Hand', 'FSM AI', 'URP'],
       bullets: [
-        'Built an immersive VR store economy simulation featuring crop cultivation, harvesting, inventory systems, physical shelf stocking, dynamic pricing, and cashier checkout.',
+        'Immersive VR store economy simulation featuring crop cultivation, harvesting, inventory systems, physical shelf stocking, dynamic pricing, and cashier checkout.',
         'Engineered a Finite State Machine (FSM) driving up to 10 autonomous customer NPCs across shelf searching, queue navigation, price evaluation, and collision avoidance.',
         'Implemented tactile VR physics with Auto Hand and OpenXR, including two-handed interactions, haptic feedback pulses, and dual VR/desktop controller support.',
-        'Developed modular data-driven gameplay for store expansion, land unlocks, inventory serialization, and economic balance.',
       ],
       githubUrl: 'https://github.com/learnyTown/innovationteam-FarmMarketVR',
+      youtubeUrl: 'https://youtu.be/g84dcb7SimM',
+      youtubeId: 'g84dcb7SimM',
     },
     {
-      title: 'NPC Punch Hit VR',
-      subtitle: 'Physics VR Combat Prototype',
+      title: 'Beat the Npc',
+      subtitle: 'Physics VR Combat Simulation',
       category: 'game',
       highlightStat: 'Active Ragdoll + 4 Hit Zones',
       tech: ['Unity VR', 'C#', 'Auto Hand', 'Active Ragdoll Physics', 'Directional Hit Detection', 'VFX'],
       bullets: [
-        'Developed a physics-based VR combat prototype using Auto Hand with custom collision layers supporting realistic momentum transfer across punches, melee weapons, and projectiles.',
+        'Physics-based VR combat prototype using Auto Hand with custom collision layers supporting realistic momentum transfer across punches, melee weapons, and projectiles.',
         'Engineered directional hit detection across 4 discrete body zones (Head, Chest, Back, Legs) calculating impact angles and velocity thresholds to trigger context-aware reactions.',
         'Implemented hybrid active-ragdoll physics combining configurable joint drives with keyframe animations, enabling physical balance recovery and procedural knockdowns.',
-        'Integrated contact-point spark and impact particle VFX, procedural camera shake, and velocity-scaled controller haptic pulses.',
       ],
       githubUrl: 'https://github.com/learnyTown/innovationteam-npcPunchHitVR',
+      youtubeUrl: 'https://www.youtube.com/watch?v=ZReh2UnKerQ',
+      youtubeId: 'ZReh2UnKerQ',
     },
   ] as ProjectItem[],
   softwareProjects: [
-    {
-      title: 'FinLens',
-      subtitle: 'AI Financial Intelligence Platform',
-      category: 'software',
-      highlightStat: 'Multimodal Gemini OCR',
-      tech: ['React', 'FastAPI', 'Python', 'SQLite', 'Docker', 'Google Gemini Multimodal'],
-      bullets: [
-        'Engineered a full-stack financial document intelligence platform with React, asynchronous FastAPI, SQLite, and Docker using authenticated JWT REST APIs.',
-        'Integrated Google Gemini Vision/Multimodal APIs with OCR pipelines to parse unstructured invoices, balance sheets, and financial receipts into structured metrics.',
-        'Built automated reconciliation workflows to cross-verify document line items and flag ledger discrepancies.',
-      ],
-      githubUrl: 'https://github.com/BloodyPrince7/FinLens',
-    },
-    {
-      title: 'RecoverAI',
-      subtitle: 'AI Automation & Recovery Platform',
-      category: 'software',
-      highlightStat: 'Autonomous Workflows',
-      tech: ['Python', 'AI Agents', 'FastAPI', 'Workflow Automation', 'Async Architecture'],
-      bullets: [
-        'Developed an automated decision platform utilizing autonomous AI agent chains to inspect diagnostic logs, evaluate error traces, and execute recovery actions.',
-        'Implemented modular decision-tree orchestration with stateful context retention and automated rollback mechanisms.',
-      ],
-      githubUrl: 'https://github.com/BloodyPrince7/Recover_AI',
-    },
     {
       title: 'Media-Automation',
       subtitle: 'Automated Media Pipeline',
@@ -289,6 +263,8 @@ export const RESUME_DATA = {
         'Implemented asynchronous worker queues and folder watchers to automate multi-format asset exports for game and web platforms.',
       ],
       githubUrl: 'https://github.com/BloodyPrince7/Media-Automation',
+      youtubeUrl: 'https://youtu.be/mCEp4S_WvBg',
+      youtubeId: 'mCEp4S_WvBg',
     },
     {
       title: 'LedgerZero',
@@ -301,6 +277,8 @@ export const RESUME_DATA = {
         'Structured clean layered architecture (Controller, Service, Repository) with Spring Boot, comprehensive validation, and secure RESTful endpoints.',
       ],
       githubUrl: 'https://github.com/BloodyPrince7/LedgerZero',
+      youtubeUrl: 'https://youtu.be/xdroHhE6AcM',
+      youtubeId: 'xdroHhE6AcM',
     },
   ] as ProjectItem[],
   achievements: [
@@ -350,28 +328,28 @@ export const RESUME_DATA = {
       depthMeters: -230,
       label: 'EXPERIENCE',
       enemyType: 'skeleton',
-      lootText: '+QUEST LOG: AR/VR INTERN & VR LEAD',
+      lootText: '+QUEST LOG: GAME DEV INTERN & VR LEAD',
     },
     {
       id: 'sector-published-games',
       depthMeters: -350,
       label: 'PUBLISHED GAMES',
       enemyType: 'golem',
-      lootText: '+SHIPPED TITLES: 3 GOOGLE PLAY GAMES',
+      lootText: '+CONTRIBUTED TO 3 GOOGLE PLAY GAMES',
     },
     {
       id: 'sector-games',
       depthMeters: -490,
-      label: 'PERSONAL PROJECTS',
+      label: 'VR PROJECTS',
       enemyType: 'golem',
-      lootText: '+UNLOCKED: PERSONAL PROJECTS',
+      lootText: '+UNLOCKED: VR PROJECTS',
     },
     {
       id: 'sector-software',
       depthMeters: -620,
-      label: 'AI & SYSTEMS',
+      label: 'SOFTWARE & SYSTEMS',
       enemyType: 'spider',
-      lootText: '+RELICS: AI & BACKEND PROJECTS',
+      lootText: '+UNLOCKED: MEDIA AUTOMATION & LEDGER ZERO',
     },
     {
       id: 'sector-achievements',
