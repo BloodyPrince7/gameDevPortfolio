@@ -95,10 +95,6 @@ function renderProjectCard(proj: ProjectItem): string {
                </a>`
             : ''
         }
-        <a class="chip-link" href="${proj.githubUrl}" target="_blank" rel="noopener noreferrer">
-          <img src="/icons/github.svg" alt="" class="btn-inline-icon" aria-hidden="true" />
-          <span>GitHub</span>
-        </a>
       </div>
     </article>
   `;
